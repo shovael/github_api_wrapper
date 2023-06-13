@@ -1,6 +1,7 @@
 import argparse
 
-from github_api_wrapper import latest_releases, forks_sum, stars_sum
+from github_api_wrapper.utils import latest_releases, forks_sum, stars_sum, contributors_sum, _make_request_api, \
+    _make_request_raw, pr_sum
 
 
 def main():
@@ -12,8 +13,10 @@ def main():
     parser.add_argument("-A", "--all-available-data", help="All th available data the wrapper has", action='store_true'
                         , dest='all')
     parser.add_argument("--latest-releases", help="The name of the last 3 releases", action='store_true')
-    parser.add_argument("--forks-sum", help="The amount of forks", action='store_true')
+    parser.add_argument("--forks-sum", help="The amount of forks project has", action='store_true')
     parser.add_argument("--stars-sum", help="The amount of stars the project has", action='store_true')
+    parser.add_argument("--contributors-sum", help="The amount of contributors project has", action='store_true')
+    parser.add_argument("--pr-sum", help="The amount of pr's project has", action='store_true')
 
     args = parser.parse_args()
 
@@ -26,13 +29,19 @@ def main():
         result += forks_sum(token, repo)
     if args.stars_sum or args.all:
         result += stars_sum(token, repo)
+    if args.contributors_sum or args.all:
+        result += contributors_sum(repo)
+    if args.pr_sum or args.all:
+        result += pr_sum(repo)
+
     print(result)
 
-    # import requests
-    # res = requests.get(url="https://api.github.com/repos/CTFd/CTFd/stargazers",
-    #                    headers={'Authorization': 'Bearer {token}'.format(token=token)}).json()
-    # print(res['stargazers_count'], res['stargazers_url'])
-    # print(res[29])
 
 if __name__ == '__main__':
+    # print(contributors_amount('CTFd/CTFd'))
+    # res = _make_request_api(url='https://api.github.com/user/shovael', token='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').text
+    # with open('./test_content', 'w+b') as fi:
+    #     fi.write(res.encode('utf-8'))
+    # print(res)
     main()
+    # pr_sum('CTFd/CTFd')
