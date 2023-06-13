@@ -1,10 +1,7 @@
 import argparse
 
-import requests
-
 from github_api_wrapper.wrapper_functions import latest_releases, forks_sum, stars_sum, contributors_sum, \
-    _make_request_api, \
-    _make_request_raw, pr_sum, contributors_ordered
+    pr_sum, contributors_ordered
 
 
 def main():

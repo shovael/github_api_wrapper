@@ -40,14 +40,15 @@ def _get_contributors_details(repo: str, token: str, url_extension: str) -> List
 
 
 def latest_releases(token: str, repo: str) -> str:
-    release_amount: int = 3
-
-    result: str = 'last {} releases are:\n'.format(release_amount)
     url: str = GITHUB_API_URL + REPOS_KEY + '/{repo_name}/releases'.format(repo_name=repo)
     response: requests.Response = _make_request_api(url, token)
     response_json: List[Dict[str: Any]] = response.json()
+
+    release_amount = min(3, len(response_json))
+    result: str = 'last {} releases are:\n'.format(release_amount) if 0 < release_amount else 'there are no releases\n'
+
     for i in range(1, release_amount + 1):
-        result += '{number}: {release_name}\n'.format(number=i, release_name=response_json[i]['name'])
+        result += '{number}: {release_name}\n'.format(number=i, release_name=response_json[i - 1]['name'])
     return result
 
 
@@ -68,12 +69,14 @@ def stars_sum(token: str, repo: str) -> str:
 def contributors_sum(repo: str) -> str:
     find_contributors_aria: str = r'Contributors\n.*\d'
     extract_number: str = r'\d+'
+    regx_res: int = 0
 
     result: str = 'amount of contributors the project has: {}\n'
     url: str = GITHUB_URL + '{repo_name}'.format(repo_name=repo)
     response: requests.Response = _make_request_raw(url)
-    res = re.findall(find_contributors_aria, response.text)[-1]
-    regx_res = re.findall(extract_number, res)[-1]
+    res = re.findall(find_contributors_aria, response.text)
+    if res:
+        regx_res = re.findall(extract_number, res[-1])[-1]
     return result.format(regx_res)
 
 
