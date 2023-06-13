@@ -2,7 +2,7 @@ from typing import Any, List, Dict, Tuple
 import re
 import requests
 
-from .request_functions import _make_request_api, _make_request_raw
+from .request_utils import _make_request_api, _make_request_raw
 
 GITHUB_API_URL: str = "https://api.github.com/"
 GITHUB_URL: str = "https://github.com/"
