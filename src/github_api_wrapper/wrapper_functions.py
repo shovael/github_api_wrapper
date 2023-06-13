@@ -108,4 +108,4 @@ def contributors_ordered(repo: str, token: str) -> str:
     res_dict = {key: val for key, val in res_dict.items() if key in contributors_names}
     ordered_result: List[Tuple[str, int]] = sorted(res_dict.items(), key=lambda x: x[1], reverse=True)
     result_str = '\n'.join(["{name}: {amount}".format(name=name, amount=amount) for name, amount in ordered_result])
-    return result_str + str(len(ordered_result))
+    return result_str
